@@ -1,0 +1,352 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do Application | nz-aviation.com</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+    :root {
+      --background-light: #F9F9F9;
+      --background-dark: #101114;
+      --primary-color-light: #E0E0E0;
+      --primary-color-dark: #333;
+      --accent-color: #00796B;
+      --text-color-light: #101114;
+      --text-color-dark: #F9F9F9;
+      --error-color: #FF5555;
+    }
+
+    body {
+      background-color: var(--background-light);
+      color: var(--text-color-light);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: var(--background-dark);
+      color: var(--text-color-dark);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin: 0;
+      padding: 10px 0;
+    }
+
+    .wrapper {
+      width: 700px;
+      max-width: 100%;
+      margin: auto;
+      text-align: center;
+    }
+
+    #day-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      list-style: none;
+      flex-wrap: wrap; 
+      text-align: center;
+    }
+
+    #day-nav li {
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    #day-nav li:hover,
+    #day-nav li.active {
+      background-color: var(--accent-color);
+      color: white;
+    }
+
+    .toggle-dark-mode {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background-color: var(--accent-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .toggle-dark-mode:hover {
+      background-color: #00e6ac;
+      transform: scale(1.05);
+    }
+
+    #todo-form {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    #todo-input {
+      flex: 1;
+      width: 70%;
+      min-width: 200px;
+      padding: 10px;
+      border: 2px solid var(--accent-color);
+      border-radius: 20px;
+      transition: border-color 0.3s ease;
+    }
+
+    #add-button {
+      padding: 10px 20px;
+      flex-shrink: 0;
+      min-width: 100px;
+      background-color: var(--accent-color);
+      border: none;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .filter {
+      margin: 20px 0;
+      padding: 10px;
+      border-radius: 20px;
+      background-color: var(--primary-color-light);
+    }
+
+    .todo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--primary-color-light);
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      transition: all 0.3s;
+    }
+
+    body.dark-mode .todo {
+      background-color: var(--primary-color-dark);
+    }
+
+    .todo.completed {
+      opacity: 0.6;
+    }
+
+    .todo-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: var(--primary-color-light);
+      border: 2px solid var(--accent-color);
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    .todo-checkbox.checked {
+      background-color: var(--accent-color);
+      transform: scale(1.2);
+    }
+
+    .todo-actions button {
+      margin-left: 10px;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 15px;
+      background-color: var(--error-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .todo-actions button:hover {
+      background-color: #ff3333;
+    }
+
+    #week-starting-day {
+      font-size: 1.1rem;
+      color: var(--text-color-light);
+      margin-top: 10px;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .wrapper {
+        width: 90%;
+      }
+
+      #day-nav li {
+        padding: 8px 15px;
+      }
+
+      #todo-input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <ul id="day-nav">
+        <li data-day="0">Monday</li>
+        <li data-day="1">Tuesday</li>
+        <li data-day="2">Wednesday</li>
+        <li data-day="3">Thursday</li>
+        <li data-day="4">Friday</li>
+        <li data-day="5">Saturday</li>
+        <li data-day="6">Sunday</li>
+      </ul>
+    </nav>
+  </header>
+  <button class="toggle-dark-mode">Toggle Appearance</button>
+  <h1>To Do Application</h1>
+  <h4 id="week-starting-day"></h4>
+  <div class="wrapper">
+    <form id="todo-form">
+      <input id="todo-input" type="text" placeholder="Add a task..." autocomplete="off">
+      <button id="add-button" type="submit">ADD</button>
+    </form>
+    <select class="filter" id="filter">
+      <option value="all">All</option>
+      <option value="completed">Completed</option>
+      <option value="not-completed">Not Completed</option>
+    </select>
+    <ul id="todo-list"></ul>
+  </div>
+  <script>
+    const dayNav = document.getElementById('day-nav');
+    const todoList = document.getElementById('todo-list');
+    const todoForm = document.getElementById('todo-form');
+    const todoInput = document.getElementById('todo-input');
+    const darkModeToggle = document.querySelector('.toggle-dark-mode');
+    const filter = document.getElementById('filter');
+
+    let currentDay = new Date().getDay();
+    let todos = JSON.parse(localStorage.getItem('todos')) || [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      highlightActiveDay();
+      loadTodos();
+      setDarkMode(localStorage.getItem('darkMode') === 'true');
+      displayWeekStartingDay();
+    });
+
+    dayNav.addEventListener('click', (e) => {
+      if (e.target.tagName === 'LI') {
+        currentDay = +e.target.dataset.day;
+        highlightActiveDay();
+        loadTodos();
+      }
+    });
+
+    function highlightActiveDay() {
+      [...dayNav.children].forEach(li => li.classList.remove('active'));
+      dayNav.children[currentDay]?.classList.add('active');
+    }
+
+    todoForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const task = todoInput.value.trim();
+      if (!task) return alert('Task cannot be empty!');
+      todos.push({ task, day: currentDay, completed: false });
+      saveTodos();
+      todoInput.value = '';
+      loadTodos();
+    });
+
+    function loadTodos() {
+      const filterValue = filter.value;
+      let filteredTodos = todos.filter(todo => todo.day === currentDay);
+
+      if (filterValue === 'completed') filteredTodos = filteredTodos.filter(todo => todo.completed);
+      else if (filterValue === 'not-completed') filteredTodos = filteredTodos.filter(todo => !todo.completed);
+
+      filteredTodos.sort((a, b) => a.completed - b.completed);
+
+      renderTodos(filteredTodos);
+    }
+
+    function renderTodos(todosToRender) {
+      todoList.innerHTML = '';
+      todosToRender.forEach(todo => {
+        const li = document.createElement('li');
+        li.className = `todo ${todo.completed ? 'completed' : ''}`;
+
+        const checkbox = document.createElement('div');
+        checkbox.className = `todo-checkbox ${todo.completed ? 'checked' : ''}`;
+        checkbox.addEventListener('click', () => toggleComplete(todo));
+
+        const text = document.createElement('span');
+        text.textContent = todo.task;
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', () => deleteTask(todo));
+
+        const actions = document.createElement('div');
+        actions.className = 'todo-actions';
+        actions.appendChild(deleteBtn);
+
+        li.append(checkbox, text, actions);
+        todoList.appendChild(li);
+      });
+    }
+
+    function toggleComplete(todo) {
+      todo.completed = !todo.completed;
+      saveTodos();
+      loadTodos();
+    }
+
+    function deleteTask(todoToDelete) {
+      todos = todos.filter(todo => todo !== todoToDelete);
+      saveTodos();
+      loadTodos();
+    }
+
+    function saveTodos() {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+
+    filter.addEventListener('change', loadTodos);
+
+    darkModeToggle.addEventListener('click', () => {
+      const isDarkMode = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', isDarkMode);
+    });
+
+    function setDarkMode(isDark) {
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+
+    function displayWeekStartingDay() {
+      const today = new Date();
+      const dayOfWeek = today.getDay();
+      const daysToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+      const mondayDate = new Date(today);
+      mondayDate.setDate(today.getDate() - daysToMonday);
+
+  const formattedDate = mondayDate.toLocaleDateString('en-NZ');
+
+  document.getElementById('week-starting-day').textContent = `Week Starting Day: ${formattedDate}`;
+}
+  </script>
+</body>
+
+</html>
