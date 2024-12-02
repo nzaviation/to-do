@@ -238,32 +238,6 @@
             transform: scale(1.1);
         }
 
-        .clear-storage-btn {
-            background-color: var(--danger);
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            transition: background-color var(--transition-speed), transform var(--transition-speed);
-            margin-top: 20px;
-        }
-
-        .clear-storage-btn:hover {
-            background-color: #ff3333;
-            transform: scale(1.05);
-        }
-
-        .clear-storage-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(255, 85, 85, 0.5);
-        }
-
         @media (max-width: 600px) {
             #todo-form {
                 flex-direction: column;
@@ -304,7 +278,6 @@
     </div>
 
     <button class="dark-mode-toggle">🌓</button>
-    <button id="clear-storage" class="clear-storage-btn">Clear All</button>
 
     <script>
         const todoForm = document.getElementById("todo-form");
@@ -350,7 +323,7 @@
                 todoList.appendChild(taskItem);
             });
 
-            console.log(tasks);
+            saveTasks(tasks);
         }
 
         todoForm.addEventListener("submit", (e) => {
@@ -439,22 +412,11 @@
           mondayDate.setDate(today.getDate() - daysToMonday);
 
           const formattedDate = mondayDate.toLocaleDateString('en-NZ');
-          document.getElementById('week-starting-day').textContent = `Week Starting Date: ${formattedDate}`;
+          document.getElementById('week-starting-day').textContent = `Week Starting Day: ${formattedDate}`;
       }
-
-      document.getElementById("clear-storage").addEventListener("click", () => {
-        const userConfirmed = confirm("Are you sure you want to clear all tasks, completely resetting the application? This action cannot be undone!");
-            if (userConfirmed) {
-                localStorage.clear();
-                alert("All tasks cleared successfully!");
-                location.reload();
-            }
-        });
-
 
       document.addEventListener('DOMContentLoaded', () => {
           displayWeekStartingDay();
-          renderTasks();
       });
     </script>
 </body>
