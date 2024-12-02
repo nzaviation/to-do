@@ -439,7 +439,7 @@
           mondayDate.setDate(today.getDate() - daysToMonday);
 
           const formattedDate = mondayDate.toLocaleDateString('en-NZ');
-          document.getElementById('week-starting-day').textContent = `Current Week Starting Date: ${formattedDate}`;
+          document.getElementById('week-starting-day').textContent = `Week Starting Date: ${formattedDate}`;
       }
 
       document.getElementById("clear-storage").addEventListener("click", () => {
